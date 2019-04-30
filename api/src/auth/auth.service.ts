@@ -39,7 +39,7 @@ export class AuthService {
     return this.userService.create(createUserDto);
   }
 
-  async validateUser(userData: User) {
+  public async validateUser(userData: User) {
     return await this.userService.findByEmail(userData.email);
   }
 
