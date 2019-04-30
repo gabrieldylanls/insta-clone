@@ -16,7 +16,7 @@ export class AuthService {
   ) { }
 
   public async login(userData: User): Promise<Token> {
-    const user: User = await this.validateUser(userData);
+    const user: User = await this.validate(userData);
     if (!user) {
       this.getError('User not found', HttpStatus.NOT_FOUND);
     }
@@ -39,7 +39,7 @@ export class AuthService {
     return this.userService.create(createUserDto);
   }
 
-  public async validateUser(userData: User) {
+  public async validate(userData: User) {
     return await this.userService.findByEmail(userData.email);
   }
 

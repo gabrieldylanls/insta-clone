@@ -1,4 +1,5 @@
-import { Controller, Get, Param, HttpCode, HttpStatus, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, HttpCode, HttpStatus, Post, Body, Put, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { UserService } from './user.service';
 import { User } from './interfaces/user.interfaces';
@@ -43,18 +44,21 @@ export class UserController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   public async update(@Param() params: { id: string }, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     return await this.userService.updateUser(params.id, updateUserDto);
   }
 
   @Put('updatePassword/:id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   public async updatePassword(@Param() params: { id: string }, @Body() body: { password: string }): Promise<boolean> {
     return await this.userService.updatePassword(params.id, body.password);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   public async delete(@Param() params: { id: string }): Promise<boolean> {
     return await this.userService.deleteUser(params.id);
