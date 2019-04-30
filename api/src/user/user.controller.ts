@@ -28,13 +28,11 @@ export class UserController {
   }
 
   @Get('checkEmail/:email')
-  @HttpCode(HttpStatus.NO_CONTENT)
   public async checkEmail(@Param() params: { email: string }): Promise<boolean> {
     return await this.userService.checkEmail(params.email);
   }
 
   @Get('checkUsername/:name')
-  @HttpCode(HttpStatus.NO_CONTENT)
   public async checkUsername(@Param() params: { name: string }): Promise<boolean> {
     return await this.userService.checkUsername(params.name);
   }
