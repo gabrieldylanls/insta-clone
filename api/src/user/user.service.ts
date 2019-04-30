@@ -30,6 +30,10 @@ export class UserService {
       .then(res => !!res);
   }
 
+  public async checkEmail(email: string): Promise<boolean> {
+    return await this.findByEmail(email).then(res => !!res);
+  }
+
   public async create(createUserDto: CreateUserDto): Promise<User> {
     const password: string = await hash(createUserDto.password, 10);
     return await this.userSchema.create({ ...createUserDto, password });
