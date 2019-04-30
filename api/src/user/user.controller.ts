@@ -43,6 +43,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   public async update(@Param() params: { id: string }, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     return await this.userService.updateUser(params.id, updateUserDto);
   }
