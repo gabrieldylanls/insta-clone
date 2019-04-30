@@ -7,6 +7,7 @@ export const UserSchema = new mongoose.Schema({
     maxlength: 10,
     lowercase: true,
     required: true,
+    unique: true,
   },
   fullName: {
     type: String,
@@ -17,6 +18,7 @@ export const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
