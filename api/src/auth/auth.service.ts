@@ -35,15 +35,15 @@ export class AuthService {
     };
   }
 
-  public async register(createUserDto: CreateUserDto) {
+  public async register(createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
 
-  public async validate(userData: User) {
+  public async validate(userData: User): Promise<User> {
     return await this.userService.findByEmail(userData.email);
   }
 
-  private getError(msg: string, status: HttpStatus) {
+  private getError(msg: string, status: HttpStatus): void {
     throw new HttpException(msg, status);
   }
 }
