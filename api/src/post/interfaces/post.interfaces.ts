@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+
 import { User } from '../../user/interfaces/user.interfaces';
 
 export interface Post extends Document {
