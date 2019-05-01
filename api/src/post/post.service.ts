@@ -20,7 +20,7 @@ export class PostService {
       .limit(12);
   }
 
-  public async findByUser(userId: string) {
+  public async findByUser(userId: string): Promise<Post[]> {
     return await this.postModel
       .find({ author: userId })
       .limit(12);
