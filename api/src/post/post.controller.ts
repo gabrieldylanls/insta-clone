@@ -1,4 +1,5 @@
-import { Controller, Post, Body, Get, Param, Put, HttpCode, HttpStatus, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, HttpCode, HttpStatus, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
@@ -27,17 +28,20 @@ export class PostController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   public async create(@Body() createPostDto: CreatePostDto): Promise<PostInterface> {
     return await this.postService.createPost(createPostDto);
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   public async update(@Param() params: { id: string }, @Body() updatePostDto: UpdatePostDto): Promise<boolean> {
     return await this.postService.updatePost(params.id, updatePostDto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   public async delete(@Param() params: { id: string }): Promise<boolean> {
     return await this.postService.deletePost(params.id);
