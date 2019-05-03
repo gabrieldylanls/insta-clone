@@ -1,10 +1,13 @@
-import { Controller, Post, Body, Get, Param, Put, HttpCode, HttpStatus, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, HttpCode, HttpStatus, Delete, UseGuards, Req, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 import { Post as PostInterface } from './interfaces/post.interfaces';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { User } from '../user/interfaces/user.interfaces';
+import { userCan } from '../user/helpers/user.helper';
 
 @Controller('posts')
 export class PostController {
@@ -36,14 +39,26 @@ export class PostController {
   @Put(':id')
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
-  public async update(@Param() params: { id: string }, @Body() updatePostDto: UpdatePostDto): Promise<boolean> {
-    return await this.postService.updatePost(params.id, updatePostDto);
+  public async update(@Req() req: Request, @Param() params: { id: string }, @Body() updatePostDto: UpdatePostDto): Promise<boolean> {
+    const user = req.user as User;
+    const post = await this.postService.findById(params.id);
+    if (userCan(user)(post)) {
+      return await this.postService.updatePost(params.id, updatePostDto);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
-  public async delete(@Param() params: { id: string }): Promise<boolean> {
-    return await this.postService.deletePost(params.id);
+  public async delete(@Req() req: Request, @Param() params: { id: string }): Promise<boolean> {
+    const user = req.user as User;
+    const post = await this.postService.findById(params.id);
+    if (userCan(user)(post)) {
+      return await this.postService.deletePost(params.id);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }
