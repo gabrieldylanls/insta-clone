@@ -8,9 +8,14 @@ import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 
+let env = process.env.NODE_ENV;
+if (!env) {
+  env = 'devlopment';
+}
+
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/ins-clone'),
+    MongooseModule.forRoot(`mongodb://${process.env.HOST}/${process.env.DB}`),
     UserModule,
     AuthModule,
     PostModule,
