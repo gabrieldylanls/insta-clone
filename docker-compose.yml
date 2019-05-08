@@ -1,0 +1,22 @@
+version: '3'
+services: 
+  mongodb:
+    image: mongo
+    container_name: dumbwiki_database
+    networks: 
+      - dbwiki-network
+  node:
+    build: 
+      dockerfile: ./Dockerfile
+      context: ./api
+    image: gdylan/dumbwiki-api
+    container_name: dumbwiki_api
+    ports: 
+      - '3000'
+    networks: 
+      - dbwiki-network
+    depends_on: 
+      - mongodb
+networks: 
+  dbwiki-network:
+    driver: bridge
